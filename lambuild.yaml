@@ -1,0 +1,19 @@
+---
+version: 0.2
+env:
+  git-credential-helper: yes
+lambuild:
+  env:
+    variables:
+      LAMBUILD_WEBHOOK_BODY: "event.Body"
+      LAMBUILD_WEBHOOK_EVENT: "event.Headers.Event"
+      LAMBUILD_WEBHOOK_DELIVERY: "event.Headers.Delivery"
+      LAMBUILD_HEAD_COMMIT_MSG: "getCommitMessage()"
+batch:
+  build-list:
+    - identifier: foo_test
+      buildspec: buildspec/foo_test.yaml
+      if: 'any(getPRFileNames(), {# startsWith "foo/"})'
+    - identifier: bar_test
+      buildspec: buildspec/bar_test.yaml
+      if: 'any(getPRFileNames(), {# startsWith "bar/"})'
